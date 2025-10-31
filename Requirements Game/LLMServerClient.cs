@@ -191,7 +191,7 @@ public class LLMServerClient {
 
         var jsonBody = new JsonBuilder();
         jsonBody.Items.Add("prompt", $"{conversationHistory} <|assistant|>");
-        jsonBody.Items.Add("n_predict", 512);
+        jsonBody.Items.Add("n_predict", 2048);
         jsonBody.Items.Add("temperature", 0.2);
         jsonBody.Items.Add("top_k", 20);
         jsonBody.Items.Add("top_p", 0.8);
