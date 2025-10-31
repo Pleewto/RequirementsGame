@@ -37,7 +37,7 @@ public class ViewHelp : View
             "Help_TitlePage.png", // 1
             "Help_ScenarioSelectionPage.png",
             "Help_ScenarioDetailsPage.png",
-            "Help_ManageScenarioPage.png",
+            "Help_manageScenarioPage.png",
             "Help_CreateScenarioPage.png",
             "Help_EditScenarioPage.png",
             "Help_ChatPage_Left.png",
