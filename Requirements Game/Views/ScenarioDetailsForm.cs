@@ -3,13 +3,23 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Linq;
 
-class ScenarioDetailsForm : Form {
+/// <summary>
+/// Displays detailed information for a selected scenario,
+/// with an option to begin the interview session.
+/// </summary>
+class ScenarioDetailsForm : Form
+{
 
     Scenario scenario;
 
-    public static void Show(Scenario scenario, Form mainForm) {
+    /// <summary>
+    /// Public method to show the scenario details form 
+    /// </summary>
+    public static void Show(Scenario scenario, Form mainForm)
+    {
 
-        using (var form = new ScenarioDetailsForm(scenario)) {
+        using (var form = new ScenarioDetailsForm(scenario))
+        {
 
             form.StartPosition = FormStartPosition.CenterParent;
             form.ShowDialog(mainForm);
@@ -18,15 +28,21 @@ class ScenarioDetailsForm : Form {
 
     }
 
+    /// <summary>
+    /// Initializes the form layout and populates content for the given scenario.
+    /// </summary>
     public ScenarioDetailsForm(Scenario scenario)
     {
+
         this.scenario = scenario;
         this.FormBorderStyle = FormBorderStyle.None;
         this.Size = new Size(600, 600);
         this.BackColor = Color.AliceBlue;
         this.TransparencyKey = Color.AliceBlue;
 
-        // Main layout
+        // -- Main TableLayoutPaenl --
+        // Layout: header (title), scrollable content (details), and footer (button)
+
         CustomTableLayoutPanel tableLayoutPanel = new CustomTableLayoutPanel();
         tableLayoutPanel.CornerRadius = 10;
         tableLayoutPanel.Dock = DockStyle.Fill;
@@ -45,8 +61,9 @@ class ScenarioDetailsForm : Form {
 
         this.Controls.Add(tableLayoutPanel);
 
-        
-        // title
+        // -- Header Section --
+        // TableLayoutPanel that holds scenario title and close button
+
         TableLayoutPanel headerPanel = new TableLayoutPanel();
         headerPanel.Dock = DockStyle.Fill;
         headerPanel.ColumnCount = 2;
@@ -71,7 +88,9 @@ class ScenarioDetailsForm : Form {
 
         tableLayoutPanel.Controls.Add(headerPanel, 1, 0);
 
-        // main description content
+        // -- Content Section --
+        // Scrollable panel showing description and participant details
+
         Panel scrollPanel = new Panel();
         scrollPanel.Dock = DockStyle.Fill;
         scrollPanel.AutoScroll = true;
@@ -94,14 +113,16 @@ class ScenarioDetailsForm : Form {
                          $"  Personality: {Scenario.SeniorSoftwareEngineer.Personality}\n\n" +
                          $"Stakeholders:\n" +
                          string.Join("\n", scenario.GetStakeholders().Select(s =>
-                             $"- {s.Name} ({s.Role}) — Personality: { s.Personality} "));
+                             $"- {s.Name} ({s.Role}) — Personality: {s.Personality} "));
 
         contentRichTextBox.AppendText(content);
         scrollPanel.Controls.Add(contentRichTextBox);
 
         tableLayoutPanel.Controls.Add(scrollPanel, 1, 1);
 
-        // begin interviewing button
+        // -- Footer Section
+        // TableLayoutPanel that holds the 'Begin Interviewing' button
+
         TableLayoutPanel footerPanel = new TableLayoutPanel();
         footerPanel.Dock = DockStyle.Fill;
         footerPanel.ColumnCount = 2;
@@ -118,19 +139,28 @@ class ScenarioDetailsForm : Form {
         beginButton.InteractionEffect = ButtonInteractionEffect.None;
         beginButton.ForeColor = Color.White;
         beginButton.Dock = DockStyle.Fill;
-        beginButton.MouseClick += TestButton_MouseClick;
+        beginButton.MouseClick += BeginButton_MouseClick;
 
         footerPanel.Controls.Add(beginButton, 1, 0);
         tableLayoutPanel.Controls.Add(footerPanel, 1, 2);
+
     }
 
-    private void CloseButton_MouseClick(object sender, MouseEventArgs e) {
+    // -- EVENTS --
+
+    private void CloseButton_MouseClick(object sender, MouseEventArgs e)
+    {
+
+        // Close ScenarioDetailsForm
 
         this.Close();
 
     }
 
-    private void TestButton_MouseClick(object sender, MouseEventArgs e) {
+    private void BeginButton_MouseClick(object sender, MouseEventArgs e)
+    {
+
+        // ScenarioDetailsForm and show Chat view
 
         Form1 form1 = (Form1)this.Owner;
         form1.ChangeView("Chat");
