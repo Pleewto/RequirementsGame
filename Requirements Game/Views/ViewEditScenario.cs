@@ -10,8 +10,8 @@ public class ViewEditScenario : ViewCreateScenario
     public void ChangeScenario(ref Scenario scenario)
     {
 
-        this.referenceScenario = scenario;
-        this.editingScenario = new Scenario(scenario);
+        this.ReferenceScenario = scenario;
+        this.EditingScenario = new Scenario(scenario);
         this.RebuildView();
 
     }

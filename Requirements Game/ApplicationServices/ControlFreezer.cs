@@ -6,16 +6,19 @@ using System.Windows.Forms;
 /// Provides methods to temporarily freeze and unfreeze a control and all its child controls
 /// to prevent UI redrawing or flickering during updates
 /// </summary>
-class ControlFreezer {
+class ControlFreezer
+{
 
     /// <summary>
     /// Recursively freezes the specified control and all its child controls
     /// </summary>
-    public static void Freeze(Control Control) {
+    public static void Freeze(Control Control)
+    {
 
         // Freeze all child controls first
 
-        foreach (Control control in Control.Controls) {
+        foreach (Control control in Control.Controls)
+        {
 
             Freeze(control);
 
@@ -33,12 +36,13 @@ class ControlFreezer {
     /// <summary>
     /// Recursively unfreezes the specified control and all its child controls
     /// </summary>
-
-    public static void Unfreeze(Control Control) {
+    public static void Unfreeze(Control Control)
+    {
 
         // Unfreeze all child controls first
 
-        foreach (Control control in Control.Controls) {
+        foreach (Control control in Control.Controls)
+        {
 
             Unfreeze(control);
 
@@ -56,7 +60,7 @@ class ControlFreezer {
 
         Control.Invalidate();
         Control.Refresh();
-      
+
     }
 
 }

@@ -5,12 +5,14 @@ using Requirements_Game.Properties;
 /// <summary>
 /// Displays stacked notifications at the bottom of the main form
 /// </summary>
-class VisualMessageManager {
+class VisualMessageManager
+{
 
     // Borderless overlay form that hosts all message panels
     private static Form MessageForm;
 
-    static VisualMessageManager() {
+    static VisualMessageManager()
+    {
 
         MessageForm = new Form();
         MessageForm.FormBorderStyle = FormBorderStyle.None;
@@ -18,6 +20,7 @@ class VisualMessageManager {
         MessageForm.TransparencyKey = Color.AliceBlue; // Make AliceBlue (form color) transparent
         MessageForm.Owner = GlobalVariables.MainForm;
         MessageForm.AutoScroll = false;
+        MessageForm.ShowInTaskbar = false;
         MessageForm.Show();
 
         UpdateMessageFormPosition();
@@ -32,7 +35,8 @@ class VisualMessageManager {
     /// Sizes and positions the overlay form to be bottom-centered over the main form
     /// and sets its height to fit all child message panels
     /// </summary>
-    static void UpdateMessageFormPosition() {
+    static void UpdateMessageFormPosition()
+    {
 
         // Width = two-thirds of main form
 
@@ -42,7 +46,8 @@ class VisualMessageManager {
 
         // Compute required height from children (panels + their margins)
 
-        foreach (Control control in MessageForm.Controls) {
+        foreach (Control control in MessageForm.Controls)
+        {
 
             requiredHeight += control.Height;
             requiredHeight += control.Margin.Top;
@@ -64,7 +69,8 @@ class VisualMessageManager {
     /// <summary>
     /// Adds a new message panel to the overlay; can auto-close after a delay
     /// </summary>
-    public static void ShowMessage(string Message, bool AutoClose = false) {
+    public static void ShowMessage(string Message, bool AutoClose = false)
+    {
 
         // Rounded TableLayoutPanel to structure the new message
         // 1 row, 3 columns: [message | close button | right padding]
@@ -116,7 +122,7 @@ class VisualMessageManager {
         closeButton.SizeMode = PictureBoxSizeMode.CenterImage;
         closeButton.Image = closeIcon;
         closeButton.InteractionEffect = ButtonInteractionEffect.Lighten;
-    
+
         closeButton.Click += (sender, e) => { // Remove the message panel when user clicks the close button
 
             messageTableLayoutPanel.Dispose();
@@ -128,7 +134,8 @@ class VisualMessageManager {
 
         // Auto-close logic
 
-        if (AutoClose) {
+        if (AutoClose)
+        {
 
             closeButton.Dispose(); // Hide the manual close button for auto-closing messages
 
@@ -143,7 +150,8 @@ class VisualMessageManager {
                 timer.Stop();
                 timer.Dispose();
 
-                if (!messageTableLayoutPanel.IsDisposed) {
+                if (!messageTableLayoutPanel.IsDisposed)
+                {
 
                     messageTableLayoutPanel.Dispose();
                     UpdateMessageFormPosition();
