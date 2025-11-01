@@ -1,14 +1,20 @@
 ﻿using Requirements_Game;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-public class ViewScenarios : View {
+/// <summary>
+/// Displays available scenarios in a responsive, multi-column grid and
+/// rebuilds the layout when the scenario list changes
+/// </summary>
+public class ViewScenarios : View
+{
 
-    public ViewScenarios() {
-
-        // View specific layout
+    /// <summary>
+    /// Initializes the scenarios view layout and subscribes to scenario change events
+    /// </summary>
+    public ViewScenarios()
+    {
 
         ViewTableLayoutPanel.Dock = DockStyle.Top;
         ViewTableLayoutPanel.AutoSize = true;
@@ -21,32 +27,43 @@ public class ViewScenarios : View {
         ViewTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30f));
         ViewTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 300f));
         ViewTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
-              
+
         RebuildView();
 
         Scenarios.ScenariosChanged += Scenarios_ScenariosChanged;
 
     }
 
-    public void Scenarios_ScenariosChanged(object sender, EventArgs e) {
+    /// <summary>
+    /// Handles global scenario list updates by rebuilding the view
+    /// </summary>
+    public void Scenarios_ScenariosChanged(object sender, EventArgs e)
+    {
 
         RebuildView();
 
     }
 
-    private void RebuildView() {
+    /// <summary>
+    /// Rebuilds the scenarios grid: clears existing rows/controls and lays out
+    /// ScenarioCards across three fixed-width columns with spacing rows
+    /// </summary>
+    private void RebuildView()
+    {
 
         // Clear all controls and TableLayoutPanel rows to be rebuilt
 
         ViewTableLayoutPanel.Controls.Clear();
         ViewTableLayoutPanel.RowStyles.Clear();
         ViewTableLayoutPanel.RowCount = 0;
-        
+
         int columnIndex = 1;
 
-        foreach (Scenario scenario in Scenarios.GetScenarios()) {
+        foreach (Scenario scenario in Scenarios.GetScenarios())
+        {
 
-            if (columnIndex == 1) {
+            if (columnIndex == 1)
+            {
 
                 ViewTableLayoutPanel.RowCount += 2;
                 ViewTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
@@ -64,7 +81,12 @@ public class ViewScenarios : View {
 
     }
 
-    private class ScenarioCard : CustomTableLayoutPanel {
+    /// <summary>
+    /// Visual card for a single scenario, showing its name and description with
+    /// hover/press feedback and click-to-open details behavior.
+    /// </summary>
+    private class ScenarioCard : CustomTableLayoutPanel
+    {
 
         private Scenario scenario;
         private bool IsMouseEnter;
@@ -73,13 +95,20 @@ public class ViewScenarios : View {
         private CustomPanel NameUnderscore;
         private CustomLabel ScenarioDescriptionLabel;
 
-        public ScenarioCard(Scenario scenario) {
+        /// <summary>
+        /// Configures the scenario card’s layout, binds scenario data, and wires up
+        /// mouse interaction events
+        /// </summary>
+        public ScenarioCard(Scenario scenario)
+        {
+
+            // -- Card Layout
 
             this.scenario = scenario;
             this.BackColor = GlobalVariables.ColorLight;
             this.CornerRadius = 15;
             this.Dock = DockStyle.Fill;
-            this.Padding = new Padding(0,5,0,5);
+            this.Padding = new Padding(0, 5, 0, 5);
             this.Margin = new Padding(0);
             this.IsMouseEnter = false;
 
@@ -93,6 +122,8 @@ public class ViewScenarios : View {
             this.RowStyles.Add(new RowStyle(SizeType.Absolute, 2f));
             this.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
 
+            // -- ScenarioNameLabel
+
             ScenarioNameLabel = new CustomLabel();
             ScenarioNameLabel.Dock = DockStyle.Fill;
             ScenarioNameLabel.Text = scenario.Name;
@@ -104,6 +135,8 @@ public class ViewScenarios : View {
             ScenarioNameLabel.Margin = new Padding(0);
             this.Controls.Add(ScenarioNameLabel, 1, 0);
 
+            // -- NameUnderscore line
+
             NameUnderscore = new CustomPanel();
             NameUnderscore.BackColor = GlobalVariables.ColorMedium;
             NameUnderscore.Size = new Size(300, 2);
@@ -111,6 +144,8 @@ public class ViewScenarios : View {
             NameUnderscore.Padding = new Padding(0);
             NameUnderscore.Margin = new Padding(5, 0, 0, 0);
             this.Controls.Add(NameUnderscore, 1, 1);
+
+            // -- ScenarioDescriptionLabel
 
             ScenarioDescriptionLabel = new CustomLabel();
             ScenarioDescriptionLabel.Dock = DockStyle.Fill;
@@ -120,7 +155,7 @@ public class ViewScenarios : View {
             ScenarioDescriptionLabel.TextAlign = ContentAlignment.TopLeft;
             ScenarioDescriptionLabel.AutoSize = true;
             ScenarioDescriptionLabel.Padding = new Padding(0);
-            ScenarioDescriptionLabel.Margin = new Padding(0, 8,0,0);
+            ScenarioDescriptionLabel.Margin = new Padding(0, 8, 0, 0);
             this.Controls.Add(ScenarioDescriptionLabel, 1, 2);
 
             // Events
@@ -151,14 +186,17 @@ public class ViewScenarios : View {
 
         }
 
-        // -- Events --
+        /// <summary>
+        /// On left mouse down, darkens the card and child regions to indicate press state
+        /// </summary>
+        private void Me_MouseDown(object sender, MouseEventArgs e)
+        {
 
-        private void Me_MouseDown(object sender, MouseEventArgs e) {
-
-            if (e.Button == MouseButtons.Left) {
+            if (e.Button == MouseButtons.Left)
+            {
 
                 ControlFreezer.Freeze(this);
-            
+
                 ScenarioNameLabel.BackColor = ColorManager.DarkenColor(ScenarioNameLabel.BackColor, 0.1);
                 NameUnderscore.BackColor = ColorManager.DarkenColor(NameUnderscore.BackColor, 0.1);
                 ScenarioDescriptionLabel.BackColor = ColorManager.DarkenColor(ScenarioDescriptionLabel.BackColor, 0.1);
@@ -170,9 +208,14 @@ public class ViewScenarios : View {
 
         }
 
-        private void Me_MouseEnter(object sender, EventArgs e) {
+        /// <summary>
+        /// On first mouse enter, applies a subtle darken effect to highlight hover state
+        /// </summary>
+        private void Me_MouseEnter(object sender, EventArgs e)
+        {
 
-            if (IsMouseEnter == false) {
+            if (IsMouseEnter == false)
+            {
 
                 IsMouseEnter = true;
 
@@ -189,10 +232,16 @@ public class ViewScenarios : View {
 
         }
 
-        private void Me_MouseLeave(object sender, EventArgs e) {
+        /// <summary>
+        /// When the mouse leaves the card (and is no longer within bounds),
+        /// restores original colours and clears hover state
+        /// </summary>
+        private void Me_MouseLeave(object sender, EventArgs e)
+        {
 
-            if (IsMouseEnter && this.ClientRectangle.Contains(this.PointToClient(Control.MousePosition)) == false) {
-          
+            if (IsMouseEnter && this.ClientRectangle.Contains(this.PointToClient(Control.MousePosition)) == false)
+            {
+
                 IsMouseEnter = false;
 
                 ControlFreezer.Freeze(this);
@@ -208,10 +257,15 @@ public class ViewScenarios : View {
 
         }
 
-        private void Me_MouseUp(object sender, MouseEventArgs e) {
+        /// <summary>
+        /// On left mouse up, resets the card visuals to their default (non-pressed) colours
+        /// </summary>
+        private void Me_MouseUp(object sender, MouseEventArgs e)
+        {
 
-            if (e.Button == MouseButtons.Left) {
-          
+            if (e.Button == MouseButtons.Left)
+            {
+
                 ScenarioNameLabel.BackColor = GlobalVariables.ColorLight;
                 NameUnderscore.BackColor = GlobalVariables.ColorMedium;
                 ScenarioDescriptionLabel.BackColor = GlobalVariables.ColorLight;
@@ -221,12 +275,15 @@ public class ViewScenarios : View {
 
         }
 
-        private void Me_MouseClick(object sender, MouseEventArgs e) {
+        /// <summary>
+        /// Selects this scenario, stores it as current, and opens the scenario details dialog
+        /// </summary>
+        private void Me_MouseClick(object sender, MouseEventArgs e)
+        {
 
             Form1 form1 = (Form1)this.FindForm();
 
-            // Remember which scenario was selected
-            GlobalVariables.CurrentScenario = scenario;
+            GlobalVariables.CurrentScenario = scenario; // Remember which scenario was selected
 
             ScenarioDetailsForm.Show(scenario, form1);
 
