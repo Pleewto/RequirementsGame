@@ -5,7 +5,8 @@ using System.Windows.Forms;
 /// <summary>
 /// Scrollable chat log that displays message bubbles for two actors
 /// </summary>
-public class ChatLog : Panel {
+public class ChatLog : Panel
+{
 
     public enum MessageActor { User, System } // Using an Enum to force only two types of actors
 
@@ -14,7 +15,8 @@ public class ChatLog : Panel {
     private Panel ChatPanel;
     private ChatMessageBubble MessageBubble;
 
-    public ChatLog() {
+    public ChatLog()
+    {
 
         this.Margin = new Padding(0);
         this.AutoScroll = true;
@@ -29,7 +31,8 @@ public class ChatLog : Panel {
     /// <summary>
     /// Appends a message to the chat log, grouping by actor and aligning appropriately
     /// </summary>
-    public void SendMessage(string message, MessageActor actor) {
+    public void SendMessage(string message, MessageActor actor)
+    {
 
         // Remove whitespace and random characters from start of message
 
@@ -48,11 +51,14 @@ public class ChatLog : Panel {
 
         if (message.Length == 0) message = "...";
 
+        // Get action string name
+
         string actorName = actor == MessageActor.System ? "System" : "User";
 
         // Start a new bubble group if this is the first message or the actor changed
 
-        if (MessageBubble == null || MessageBubble.Name != actorName) {
+        if (MessageBubble == null || MessageBubble.Name != actorName)
+        {
 
             int panelLocationY = ChatPanel == null ? 20 : ChatPanel.Location.Y + ChatPanel.Height + 20; // Add spacing after previous group
 
@@ -88,7 +94,8 @@ public class ChatLog : Panel {
     /// <summary>
     /// Clears all chat content and resets scroll position
     /// </summary>
-    public void Clear() {
+    public void Clear()
+    {
 
         this.Controls.Clear();
         ChatPanel = null;
@@ -101,13 +108,16 @@ public class ChatLog : Panel {
     /// Adjust ChatPanel widths to match the controls new size,
     /// which then auto aligns the chat bubbles to the correct new positions
     /// </summary>
-    private void ChatMessageBubble_SizeChanged(object sender, EventArgs e) {
+    private void ChatMessageBubble_SizeChanged(object sender, EventArgs e)
+    {
 
         // Match group panel widths to the control width
 
-        foreach (Control control in this.Controls) {
+        foreach (Control control in this.Controls)
+        {
 
-            if (control is Panel panel && panel.Controls.Count > 0) {
+            if (control is Panel panel && panel.Controls.Count > 0)
+            {
 
                 panel.Size = new Size(this.Width - 50, panel.Controls[0].Size.Height);
 
@@ -117,7 +127,8 @@ public class ChatLog : Panel {
 
         // Keep view pinned to the latest message when vertical scroll is visible
 
-        if (this.VerticalScroll.Visible) {
+        if (this.VerticalScroll.Visible)
+        {
 
             this.AutoScrollPosition = new Point(0, this.VerticalScroll.Maximum);
 
@@ -128,9 +139,11 @@ public class ChatLog : Panel {
     /// <summary>
     /// Internal message bubble class, used to apply defaults properties
     /// </summary>
-    private class ChatMessageBubble : CustomLabel {
+    private class ChatMessageBubble : CustomLabel
+    {
 
-        public ChatMessageBubble() {
+        public ChatMessageBubble()
+        {
 
             this.AutoSize = true;
             this.Padding = new Padding(5);
